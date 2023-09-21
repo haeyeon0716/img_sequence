@@ -1,20 +1,3 @@
-/*
-1. 이미지 동적으로 200개 생성
-2. 이미지 소스가 로딩이 될때가 에러가 발생하는 시스템이벤트 설정
-3. 브라우저에서 마우스 움직일 때마다 마우스 좌표값 구하기
-4. 특정수치값을 백분율화 하는 로직처리
-5. 이미지 소스가 모두 로딩되는 상태를 백분율로 변환
-*/
-
-//img 노드 생성
-//src속성 노드 생성
-//src속성노드에 value = img/pic0~100.jpg
-//위 작업을 100번 반복 돌리면서
-//append로 이미지 요소 반복추가
-
-//백분율 구하는 공식
-//현재 수치값 / 전체수치값 * 100 (백분율)
-//현재 수치값 / 전체수치값 * 200 (이백분율)
 const num =200;
 const section = document.querySelector('section');
 const imgs = createImgs(section, num);
@@ -26,15 +9,12 @@ window.addEventListener('mousemove' , (e)=>{
     activation(imgs, percent);
 })
 
-//이벤트정보 객체와 전체갯수를 받아서 
-//해당 숫자에 대한 백분율 반환함수
 function getPercent(e, num){
     const curPos = e.pageX;
     const wid = window.innerWidth;
     return parseInt((curPos/wid) * num);
 }
 
-//인수로 갯수를 받아 동적으로 Img 생성해 주는 함수
 function createImgs(target, num){
     for(let i=0; i < num; i++){
         const img = document.createElement('img');
@@ -43,13 +23,23 @@ function createImgs(target, num){
         img.setAttributeNode(src);
         target.append(img);
     }
-    return target.querySelectorAll('img');  
+    const imgs = target.querySelectorAll('img');
+    let count =0;
+    imgs.forEach((img)=>{
+        //해당 도메 수반되는 소스 이미지가 로딩완료시 실행되는 이벤트
+        img.onload =()=>{
+            count++;
+            console.log('현재 로딩된 소스 이미지', count);
+            if(count === num){
+                //동적으로 만들어진 img 요소의 소스 이미지가 렌더링 완료된 시점
+                console.log('모든 소스이미지 로딩 완료')
+            }
+        };
+    });
+    return imgs;  
 }
 
-//인수로 그룹 유사배열, 활성화 순번을 받아서 
-//해당 순번의 요소만 활성화 처리
 function activation(arr , index){
     arr.forEach((el)=>(el.style.display = 'none'));
     arr[index].style.display = 'block';
-
 }
