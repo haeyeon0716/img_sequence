@@ -1,6 +1,8 @@
 const num =200;
 const section = document.querySelector('section');
 const imgs = createImgs(section, num);
+const loadingNum = document.querySelector('aside p span');
+const aside = document.querySelector('aside');
 
 
 
@@ -29,10 +31,13 @@ function createImgs(target, num){
         //해당 도메 수반되는 소스 이미지가 로딩완료시 실행되는 이벤트
         img.onload =()=>{
             count++;
+            const percent = parseInt((count / num) * 100);
+            loadingNum.innerText = percent;
             console.log('현재 로딩된 소스 이미지', count);
             if(count === num){
                 //동적으로 만들어진 img 요소의 소스 이미지가 렌더링 완료된 시점
-                console.log('모든 소스이미지 로딩 완료')
+                console.log('모든 소스이미지 로딩 완료');
+                aside.remove;
             }
         };
     });
@@ -43,3 +48,5 @@ function activation(arr , index){
     arr.forEach((el)=>(el.style.display = 'none'));
     arr[index].style.display = 'block';
 }
+
+
